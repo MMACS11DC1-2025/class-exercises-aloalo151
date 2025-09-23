@@ -11,3 +11,6 @@ How old are you?
 > 25
 In 2056, you will be 56 years old!
 """
+
+current = int(input("How old are you now?               "))
+print(f"In 2056, you will be {current + 31} years old!")

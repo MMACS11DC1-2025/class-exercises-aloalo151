@@ -14,3 +14,8 @@ Judge 4: 8.5
 Judge 5: 9
 Your Olympic score is 8.0
 """
+
+total = 0
+for i in range(5):
+    total = total + float(input("What's your scoring?        "))
+print(total/5)
