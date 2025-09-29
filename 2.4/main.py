@@ -1,11 +1,15 @@
 file = open("2.4/responses.csv")
 bigData = []
-lineCounter = 0
 likeHigh = [0, ""]
+myself = []
+
 for line in file:
-    bigData.append(line.split(","))
-    bigData[lineCounter][9] = bigData[lineCounter][9].strip("\n")
-    lineCounter += 1
+    bigData.append(line.strip("\n").split(","))
+    
+for person in bigData:
+    if person[1] == "Nguyen Doan":
+        myself = person
+print(myself)
 # for item in bigData:
 #     print(item)
 # print(bigData)
