@@ -1,4 +1,12 @@
 """
+Create a program that uses counting and comparison operators (< > <= >=).
+You must use the class' datafile, 'responses.csv' and analyze it
+    to make at least 2 interesting observations.
+You must use user input to add interactivity to the program.
+You must design your algorithm in English first, then translate it to Python code.
+Test as you go! Describe in your comments what steps you took to test your code.
+"""
+"""
 Create a program that uses comparison operators (< > <= >=).
 You must use the class' datafile, 'responses.csv' and analyze it
     to make at least 2 interesting observations.
@@ -65,7 +73,8 @@ def inputTrait():
         traits[trait] = traits[trait].replace(" ", "")
         traits[trait] = int(traits[trait])
 
-# goes through the 
+# goes through the list of people and find the people with the same interest using the input from the user.
+# goes through each person in the list and comparing their traits to the user's using the index inputed by the user
 def findTraits():
     global traits
     global simiPpl
@@ -92,8 +101,8 @@ def constructSentence1():
     sentence1 = sentence1.replace(",", ".")
     print(sentence1)
                 
-# Find the person most alike to me
-# goes through the big list and compare each person's responses (excluding me) to mine
+# Find the person most alike to the user
+# goes through the big list and compare each person's responses (excluding the user) to the user's
 # record the number of similarities and compare it to the previous highest 
 def findAlike():
     for person in range(len(bigData)):
