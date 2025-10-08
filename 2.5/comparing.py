@@ -78,7 +78,7 @@ def init():
     global mode
     name = input("Please enter your full name: ").lower().strip(";., ")
     for person in range(len(bigData)):
-        if name == bigData[person][1].lower():
+        if name in bigData[person][1].lower():
             nameID = int(bigData[person][0])
     if nameID == 0:
         print("Please try again.")
@@ -136,8 +136,7 @@ def constructSentence1():
         sentence1 = f"{sentence1} also like"
         for trait in traits:
             sentence1 = f"{sentence1} {bigData[nameID][trait+1]},"
-        sentence1 = sentence1.replace(",", ".")
-        sentence1 = sentence1.replace(".", ",", sentence1.count(".")-1) 
+        sentence1 = sentence1[:-1] + "."
     else:
         sentence1 = "Sorry, there's no one else with those interests."
     print(sentence1)
