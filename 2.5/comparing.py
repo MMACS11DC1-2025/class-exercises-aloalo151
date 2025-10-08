@@ -14,6 +14,37 @@ You may use user input to add interactivity to the program.
 You must design your algorithm in English first, then translate it to Python code.
 Test as you go! Describe in your comments what steps you took to test your code.
 """
+# program takes user's name and allow user to choose one of 2 functions:
+# to find people with specific similar interest or find the person who is overall most similar to the user
+
+#Example cases: 
+# Case 1:
+# Please enter your full name: nguyen doan
+# Do you want to find people with a same specific interest or someone with overall similar interest? Enter 1 for the for and 2 for the latter. 2
+# You are most similar to Steven Zhang. You both like 5, Badminton, and Thriller/Mystery!
+ 
+# Case 2:
+# Please enter your full name: asHaR siDDIqui, . 
+# Do you want to find people with a same specific interest or someone with overall similar interest? Enter 1 for the for and 2 for the latter. 1
+# Please select the traits that you want by listing the numbers correspondent to each trait, seperated by a comma
+# ie. for music genre and animal, enter "6, 2"
+# 1 for favourite number
+# 2 for favourite animal
+# 3 for favourite subject in school
+# 4 for favourite sport to play
+# 5 for favourite sport to watch
+# 6 for favourite music genre
+# 7 for favourite movie genre
+# 8 for favourite fast food nearby
+# Enter your selection: 6, 2
+# Erisha Rahman also like Rock, Bird.
+
+# Error case:
+# Please enter your full name: never gonna give you up
+# Please try again.
+# Please enter your full name: ethan Wong
+# Do you want to find people with a same specific interest or someone with overall similar interest? Enter 1 for the for and 2 for the latter. 2
+# You are most similar to Derick Su. You both like Classical, Fantasy/Sci-Fi, and Bubble Waffle!
 file = open("2.4/responses.csv")
 bigData = []
 global likeHigh
@@ -52,6 +83,7 @@ def init():
     if nameID == 0:
         print("Please try again.")
         init()
+        return
     mode = int(input("Do you want to find people with a same specific interest or someone with overall similar interest? Enter 1 for the for and 2 for the latter. "))
 
 # ask what traits the users have in mind
@@ -78,10 +110,11 @@ def inputTrait():
 def findTraits():
     global traits
     global simiPpl
+    global nameID
     for person in range(len(bigData)): 
         if bigData[person][0] != str(nameID):
             quota = 0
-            for trait in range(len(traits)):
+            for trait in traits:
                 if bigData[person][trait+1] == bigData[nameID][trait+1]:
                     quota += 1
             if quota == len(traits):
@@ -90,15 +123,23 @@ def findTraits():
 # make sentence
 def constructSentence1():
     global sentence1
-    for person in range(len(simiPpl)):
-        if person == len(simiPpl)-1:
-            sentence1 = f"{sentence1}and {simiPpl[person]}"
-        else:
-            sentence1 = f"{sentence1}{simiPpl[person]}, "
-    sentence1 = f"{sentence1} also like"
-    for trait in traits:
-        sentence1 = f"{sentence1} {bigData[nameID][trait+1]},"
-    sentence1 = sentence1.replace(",", ".")
+    global simiPpl
+    if simiPpl != []:
+        for person in range(len(simiPpl)):
+            if person == len(simiPpl)-1:
+                if person < 0:
+                    sentence1 = f"{sentence1}and {simiPpl[person]}"
+                else: 
+                    sentence1 = f"{simiPpl[person]}"
+            else:
+                sentence1 = f"{sentence1}{simiPpl[person]}, "
+        sentence1 = f"{sentence1} also like"
+        for trait in traits:
+            sentence1 = f"{sentence1} {bigData[nameID][trait+1]},"
+        sentence1 = sentence1.replace(",", ".")
+        sentence1 = sentence1.replace(".", ",", sentence1.count(".")-1) 
+    else:
+        sentence1 = "Sorry, there's no one else with those interests."
     print(sentence1)
                 
 # Find the person most alike to the user
@@ -114,7 +155,7 @@ def findAlike():
                     likeTemp += 1
             # compares the current count to the previous highest
             global likeHigh
-            if likeTemp > likeHigh[0]:
+            if likeTemp >= likeHigh[0]:
                 likeHigh = [likeTemp, bigData[person][1], bigData[person][0], person] 
                 
 # find the similarities between the 2 people
