@@ -25,7 +25,7 @@ for number in range(len(hexa)):
     for digit in range(len(hexa[number])):
         if hexa[number][digit] in hexaDict:
             hexa[number][digit] = hexaDict.get(hexa[number][digit])
-        num += int(hexa[number][digit])*16**digit
+        num += int(hexa[number][digit])*16**(len(hexa[number])-1-digit)
     decimal.append(num)
 print(decimal)
 
