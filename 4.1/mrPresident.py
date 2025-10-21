@@ -8,6 +8,12 @@ shape2.left(180)
 shape3.right(90)
 shape4.left(90)
 inv = input("Inverted (Y/N)? ").lower()
+colour = input("Colour? ")
+if colour.lower() != "pride":
+    shape1.color(colour)
+    shape2.color(colour)
+    shape3.color(colour)
+    shape4.color(colour)
 if inv == "y":
     intX = 0
     intY = 0
@@ -136,6 +142,42 @@ for i in range(len(inv)):
 
 
     while line1 < len(pointsX1): 
+        if colour.lower() == "pride":
+            if line1/len(pointsX1) < 1/7:
+                shape1.pencolor("red")
+                shape2.pencolor("red")
+                shape3.pencolor("red")
+                shape4.pencolor("red")
+            elif line1/len(pointsX1) < 2/7:
+                shape1.pencolor("orange")
+                shape2.pencolor("orange")
+                shape3.pencolor("orange")
+                shape4.pencolor("orange")
+            elif line1/len(pointsX1) < 3/7:
+                shape1.pencolor("yellow")
+                shape2.pencolor("yellow")
+                shape3.pencolor("yellow")
+                shape4.pencolor("yellow")
+            elif line1/len(pointsX1) < 4/7:
+                shape1.pencolor("green")
+                shape2.pencolor("green")
+                shape3.pencolor("green")
+                shape4.pencolor("green")
+            elif line1/len(pointsX1) < 5/7:
+                shape1.pencolor("blue")
+                shape2.pencolor("blue")
+                shape3.pencolor("blue")
+                shape4.pencolor("blue")
+            elif line1/len(pointsX1) < 6/7:
+                shape1.pencolor("indigo")
+                shape2.pencolor("indigo")
+                shape3.pencolor("indigo")
+                shape4.pencolor("indigo")
+            elif line1/len(pointsX1) < 7/7:
+                shape1.pencolor("violet")
+                shape2.pencolor("violet")
+                shape3.pencolor("violet")
+                shape4.pencolor("violet")
         lines1()
         lines2()
         lines3()
