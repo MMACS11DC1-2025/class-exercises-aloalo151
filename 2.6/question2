@@ -1,0 +1,11 @@
+questions = ["Did you eat? ", "Did you study? ", "Did you do your laundry? ", "Did you call grandma? "]
+goodBoyScore = 0
+for question in questions: 
+    if input(question).lower() == "yes":
+        goodBoyScore += 1
+if goodBoyScore == 0:
+    print("I'm coming over")
+elif goodBoyScore <= 2:
+    print("Ok.")
+elif goodBoyScore <= 4:
+    print("Good!")
