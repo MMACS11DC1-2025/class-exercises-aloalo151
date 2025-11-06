@@ -1,12 +1,47 @@
 import turtle
-turtle.pendown()
+import time
 turtle.delay(0)
 turtle.speed(0)
+turtle.hideturtle()
+heading = 90
+turtle.seth(heading)
+turtle.tracer(0)
+turtle.penup()
+
+kochSettings = {
+    "level": 0,
+    "branch":0,
+    "size": 0,
+    "colour1": [0, 0, 0],
+    "colour2": [0, 0, 0],
+    "inverse": ""
+}
+
+#get input from user
+kochSettings["level"] = int(input("How many levels do you want the Koch Snowflake to have (max 4)? ").strip())
+kochSettings["branch"] = int(input("How many levels do you want the Koch Snowflakes to have (max 4)? ").strip())
+kochSettings["size"] = int(input("How big do you want the snowflakes to be? ").strip())
+kochSettings["colour1"] = input("What colour do you want for the Koch Snowflake? ").strip().lower()
+kochSettings["colour2"] = input("What colour do you want for the background? ").strip().lower()
+kochSettings["inverse"] = input("Do you want to reverse the Koch snowflakes (y/n)? ").lower().strip()
+
+global linesDrawn
+linesDrawn = 0
+start = time.time()
+global current
+current = 1
+
+# function used to check if the snowflake is inversed or not
+def checkInverse(num):
+    return num if kochSettings["inverse"] == "n" else -num
 
 
+# kochLine draws a singular side of a Koch snowflake. 
 def kochLine(level, length):
     if level == 1:
+        global linesDrawn
         turtle.forward(length)
+        linesDrawn += 1
     else:
         kochLine(level-1, length/3)
         turtle.left(60)
@@ -16,13 +51,61 @@ def kochLine(level, length):
         turtle.left(60)
         kochLine(level-1, length/3)
     
-def kochSnowflake(level, length):
+# recursive function that draws a full koch snowflake, with it surrounded by 
+def kochSnowflake(level, length, colour, tile):
+    turtle.fillcolor(colour)
+    turtle.begin_fill()
     kochLine(level, length)
-    turtle.right(120)
+    if tile > 0:
+        turtle.end_fill()
+        turtle.begin_fill()
+        turtle.left(60)
+        kochSnowflake(level, length, colour, tile-1)
+        turtle.right(60)
+        turtle.end_fill()
+        turtle.begin_fill()
+    turtle.right(checkInverse(120))
     kochLine(level, length)
-    turtle.right(120)
+    if tile > 0:
+        turtle.end_fill()
+        turtle.begin_fill()
+        turtle.left(60)
+        kochSnowflake(level, length, colour, tile-1)
+        turtle.right(60)
+        turtle.end_fill()
+        turtle.begin_fill()
+    turtle.right(checkInverse(120))
     kochLine(level, length)
-    turtle.right(120)
+    if tile > 0:
+        turtle.end_fill()
+        turtle.begin_fill()
+        turtle.left(60)
+        kochSnowflake(level, length, colour, tile-1)
+        turtle.right(60)
+        turtle.end_fill()
+        turtle.begin_fill()
+    turtle.right(checkInverse(120))
+    turtle.end_fill()
 
-kochSnowflake(5, 700)
+
+turtle.goto(0, 0)
+turtle.seth(heading)
+turtle.forward(kochSettings["size"]/2)
+turtle.right(150)
+turtle.pendown()
+turtle.bgcolor(kochSettings["colour2"])
+turtle.pencolor(kochSettings["colour1"])
+
+while True:
+    turtle.clear()
+    turtle.penup()
+    turtle.goto(0, 0)
+    turtle.seth(heading)
+    turtle.forward(kochSettings["size"]/2)
+    turtle.right(checkInverse(150))
+    turtle.pendown()
+    kochSnowflake(kochSettings["level"], kochSettings["size"], kochSettings["colour1"], kochSettings["branch"])
+    turtle.update()
+    print(f"\rTotal lines drawn: {linesDrawn} | Lines Drawn per Second: {linesDrawn/(time.time()-start):.5f}", end=" ")
+    heading += 1
 turtle.done()
