@@ -55,38 +55,38 @@ def kochLine(level, length):
         kochLine(level-1, length/3)
     
 # recursive function that draws a full koch snowflake, with it surrounded by 
-def kochSnowflake(level, length, colour, tile):
+def kochSnowflake(level, length, colour, branch):
     turtle.fillcolor(colour)
     turtle.begin_fill()
     kochLine(level, length)
     # after finishing drawing a line of the triangle, checks the level. If not the base case, then draws an additional snowflake.
     # the begin_fill and end_fill are to try to colour as much of the triangle as possible since the way fill works doens't really 
     # work well with recursive functions.
-    if tile > 0:
+    if branch > 0:
         turtle.end_fill()
         turtle.begin_fill()
         turtle.left(60)
-        kochSnowflake(level, length, colour, tile-1)
+        kochSnowflake(level, length, colour, branch-1)
         turtle.right(60)
         turtle.end_fill()
         turtle.begin_fill()
     turtle.right(checkInverse(120))
     kochLine(level, length)
-    if tile > 0:
+    if branch > 0:
         turtle.end_fill()
         turtle.begin_fill()
         turtle.left(60)
-        kochSnowflake(level, length, colour, tile-1)
+        kochSnowflake(level, length, colour, branch-1)
         turtle.right(60)
         turtle.end_fill()
         turtle.begin_fill()
     turtle.right(checkInverse(120))
     kochLine(level, length)
-    if tile > 0:
+    if branch > 0:
         turtle.end_fill()
         turtle.begin_fill()
         turtle.left(60)
-        kochSnowflake(level, length, colour, tile-1)
+        kochSnowflake(level, length, colour, branch-1)
         turtle.right(60)
         turtle.end_fill()
         turtle.begin_fill()
