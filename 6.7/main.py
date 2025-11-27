@@ -1,5 +1,5 @@
 '''
-Look at pictures of galaxies and categorize them using their brighter stars
-
-
+Banana Checker:
+Looks at the colour of the banana and judge its ripeness
 '''
+
