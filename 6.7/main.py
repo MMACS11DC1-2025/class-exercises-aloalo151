@@ -1,20 +1,48 @@
 '''
-Banana Checker:
-Looks at the colour of the banana and judge its ripeness
-green = unripe, green-yellow = just ripe, yellow = ripe, yellow-brown = too ripe, brownish = overipe
+Morse Code Reader:
+Go through a picture of a morse code message, identify the dots and lines, then translate the message into English. Sort by amount of words in each message.
 '''
 
 from PIL import Image
 
-imgList = []
+''' 
+Pseudocode:
 
-def judgeRipeness(img):
-    width = img.width
-    height = img.height
-    pixels = []
-    
-    for x in range(width):
-        for y in range(height):
-            r, g, b = img[x, y]
-            if b <= 100:
-                pixels.append([x, y, (r, g)])
+image list/array = []
+
+for pixel in width:
+    imageList.append([])
+    for pixel in height
+        imageList[pixel].append(not_labeled)
+
+
+for pixel in width
+    for pixel in height
+        if pixel is not labeled
+            check pixel (function)
+            if pixel is foreground/black
+                label as black
+                check surrounding pixels
+            else lable as white
+    '''
+imgLabels = []
+
+img = Image.open("6.7/morse_images/morse1.png")
+width, height = img.size
+img = img.load()
+
+for x in range(width):
+    imgLabels.append([])
+    for y in range(height):
+        imgLabels[x].append("")
+        
+def labelPixel(x, y, label):
+    if imgLabels[x][y] == "":
+        r, g, b = imgLabels[x, y]
+        if r<25 and g<25 and b<25:
+            imgLabels[x][y] = 1
+        else: 
+            imgLabels[x][y] = 0
+
+for x in range(width):
+    print(imgLabels[x])
