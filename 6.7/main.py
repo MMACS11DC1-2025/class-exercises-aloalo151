@@ -26,6 +26,7 @@ for pixel in width
             else lable as white
     '''
 imgLabels = []
+labelNum = 1
 
 img = Image.open("6.7/morse_images/morse1.png")
 width, height = img.size
@@ -40,9 +41,9 @@ def labelPixel(x, y, label):
     if imgLabels[x][y] == "":
         r, g, b = imgLabels[x, y]
         if r<25 and g<25 and b<25:
-            imgLabels[x][y] = 1
+            imgLabels[x][y] = label
+            return True
         else: 
             imgLabels[x][y] = 0
+            return False
 
-for x in range(width):
-    print(imgLabels[x])
