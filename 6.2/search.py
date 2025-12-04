@@ -1,4 +1,4 @@
-file = open("6.2/spotify.csv")
+file = open("6.2/spotify.csv", encoding="utf-8")
 junk = file.readline()
 
 drake_data = []
@@ -11,6 +11,14 @@ for line in file:
 	
 	if artist == "Drake":
 		drake_data.append([danceability, songtitle, artist])
+  
+for spot in range(len(drake_data)):
+    lowScore = spot
+    i = spot+1
+    for i in range(len(drake_data)):
+        if drake_data[i][1] <= drake_data[lowScore][1]:
+            lowScore = i
+    drake_data[spot], drake_data[lowScore] = drake_data[lowScore], drake_data[spot]
 
 print("Dance score \tSong")
 for item in drake_data:
