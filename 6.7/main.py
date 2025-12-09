@@ -5,6 +5,7 @@ Go through a picture of a morse code message, identify the dots and lines, then 
 
 from PIL import Image
 import random
+import math
 
 ''' 
 Pseudocode:
@@ -48,7 +49,7 @@ for y in range(height):
 def labelPixel(x, y, label):
     if imgLabels[y][x] == "":
         r, g, b, a = img[x, y]
-        if r<100 and g<100 and b<100:
+        if r<120 and g<120 and b<120:
             imgLabels[y][x] = label
             for x_pos in range(x-1, x+2):
                 for y_pos in range(y-1, y+2):
@@ -65,8 +66,41 @@ for x in range(width):
     for y in range(height):
         if labelPixel(x, y, labelNum):
             labelNum += 1
-                   
-label1 = []
+
+labelList = []         
+for i in range(1, labelNum):
+    labelPixel = []
+    for y in range(height):
+        for x in range(width):
+                if imgLabels[y][x] == i:
+                    labelPixel.append([x, y])
+    bigX = labelPixel[0][0]
+    prevX = (0 if i == 0 else bigX)
+    smolX = labelPixel[0][0]
+    bigY = labelPixel[0][1]
+    smolY = labelPixel[0][1]
+    for id in range(len(labelPixel)):
+        if labelPixel[id][0] > bigX:
+            bigX = labelPixel[id][0]
+        if labelPixel[id][0] < smolX:
+            smolX = labelPixel[id][0]
+        if labelPixel[id][1] > bigY:
+            bigY = labelPixel[id][1]
+        if labelPixel[id][1] < smolY:
+            smolY = labelPixel[id][1]
+    print( math.atan((bigY-smolY)/(bigX-smolX)))
+    if bigX - prevX+1 < bigX - smolX:
+        labelList.append(" ")
+    if 1.1 < math.atan((bigY-smolY)/(bigX-smolX)) < 1.23:
+        labelList.append("/")
+    elif 0.1 < math.atan((bigY-smolY)/(bigX-smolX)) < 0.2:
+        labelList.append("-")
+    else:
+        labelList.append(".")        
+                    
+    
+
+
 for i in range(1, labelNum):
     colour = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
     for y in range(height):
@@ -85,3 +119,7 @@ for i in range(1, labelNum):
 #     print(imgLabels[y])
 imgOutput.save("image.png")
 print(labelNum)
+message = ""
+for i in labelList:
+    message += i
+print(message)
