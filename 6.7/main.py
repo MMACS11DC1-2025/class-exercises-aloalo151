@@ -30,9 +30,40 @@ for pixel in width
 imgLabels = []
 labelNum = 1
 
-img = Image.open("6.7/morse_images/morse1.png").load()
-imgOutput = Image.open("6.7/morse_images/morse1.png")
+img = Image.open("6.7/morse_images/morse2.png").load()
+imgOutput = Image.open("6.7/morse_images/morse2.png")
 width, height = imgOutput.size
+morseDict = {
+    '.-': 'A',
+    '-...': 'B',
+    '-.-.': 'C',
+    '-..': 'D',
+    '.': 'E',
+    '..-.': 'F',
+    '--.': 'G',
+    '....': 'H',
+    '..': 'I',
+    '.---': 'J',
+    '-.-': 'K',
+    '.-..': 'L',
+    '--': 'M',
+    '-.': 'N',
+    '---': 'O',
+    '.--.': 'P',
+    '--.-': 'Q',
+    '.-.': 'R',
+    '...': 'S',
+    '-': 'T',
+    '..-': 'U',
+    '...-': 'V',
+    '.--': 'W',
+    '-..-': 'X',
+    '-.--': 'Y',
+    '--..': 'Z', 
+    "--..--": ",",
+    ".-.-.-": ".",
+    ".----.": "'"
+}
 
 for y in range(height):
     imgLabels.append([])
@@ -67,15 +98,17 @@ for x in range(width):
         if labelPixel(x, y, labelNum):
             labelNum += 1
 
-labelList = []         
+labelList = []    
+
+notSpace = 0     
 for i in range(1, labelNum):
     labelPixel = []
     for y in range(height):
         for x in range(width):
                 if imgLabels[y][x] == i:
                     labelPixel.append([x, y])
+    prevX = (0 if i == 1 else bigX)
     bigX = labelPixel[0][0]
-    prevX = (0 if i == 0 else bigX)
     smolX = labelPixel[0][0]
     bigY = labelPixel[0][1]
     smolY = labelPixel[0][1]
@@ -88,9 +121,22 @@ for i in range(1, labelNum):
             bigY = labelPixel[id][1]
         if labelPixel[id][1] < smolY:
             smolY = labelPixel[id][1]
-    print( math.atan((bigY-smolY)/(bigX-smolX)))
-    if bigX - prevX+1 < bigX - smolX:
-        labelList.append(" ")
+    if i == 2:
+        notSpace = bigX - prevX
+    dist = smolX - prevX
+    # print(f"bigX: {bigX}")
+    # print(f"smolX: {smolX}")
+    # print(f"prevX: {prevX}")
+    # print(f"notSpace: {notSpace}")
+    # print(f"dist: {dist}")
+    # print("")
+    if dist < notSpace*.75:
+        notSpace = dist
+        for index in range(len(labelList) -1, -1, -1):
+            labelList.insert(index, " ")
+    if i > 1:
+        if dist > notSpace*1.5:
+            labelList.append(" ")
     if 1.1 < math.atan((bigY-smolY)/(bigX-smolX)) < 1.23:
         labelList.append("/")
     elif 0.1 < math.atan((bigY-smolY)/(bigX-smolX)) < 0.2:
@@ -110,13 +156,11 @@ for i in range(1, labelNum):
             
 
 
-# for y in range(height):
-#     for x in range(width):
-#         if imgLabels[y][x] != 0:
-#             imgOutput.putpixel([x, y], (imgLabels[y][x], 0, 0))
-            
-# for y in range(height):
-#     print(imgLabels[y])
+for character in range(len(labelList)):
+    for letter in morseDict:
+        if letter == labelList[character]:
+            labelList[character] == morseDict[letter]
+    
 imgOutput.save("image.png")
 print(labelNum)
 message = ""
