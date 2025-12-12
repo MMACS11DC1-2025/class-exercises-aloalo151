@@ -8,3 +8,25 @@ exercises to include calculations, if you wish.
 Remember to design your algorithm in English first, then translate it to Python 
 code. Test as you go!
 """
+
+print("Please enter your calculation:")
+calculation = input().split()
+answer = 0
+for i in range(3):
+    calculation[i] = calculation[i].strip()
+    if i == 0 or i == 2:
+        calculation[i] = float(calculation[i])
+match calculation[1]:
+	case "+":
+		answer = calculation[0]+calculation[2]
+	case "-":
+		answer = calculation[0]-calculation[2]
+	case "x":
+		answer = calculation[0]*calculation[2]
+	case "":
+		answer = calculation[0]*calculation[2]
+	case "/":
+		answer = calculation[0]/calculation[2]
+	case "^":
+		answer = calculation[0]**calculation[2]
+print(f"Your answer is {answer}")

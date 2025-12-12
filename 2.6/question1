@@ -1,0 +1,8 @@
+print("Please enter hobbies, seperated by spaces.")
+p1 = input("Person 1: ").lower().split(" ")
+p2 = input("Person 2: ").lower().split(" ")
+simi = 0
+for hobbie in p1:
+    if hobbie in p2:
+        simi += 1
+print(f"You have {simi} hobbies in common)
