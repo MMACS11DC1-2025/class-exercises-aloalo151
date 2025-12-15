@@ -8,6 +8,16 @@ import time
 import math
 
 morseDict = {
+    "-----": "0",
+    ".----": "1",
+    "..---": "2",
+    "...--": "3",
+    "....-": "4",
+    ".....": "5",
+    "-....": "6",
+    "--...": "7",
+    "---..": "8",
+    "----.": "9",
     '.-': 'A',
     '-...': 'B',
     '-.-.': 'C',
@@ -37,7 +47,8 @@ morseDict = {
     "--..--": ",",
     ".-.-.-": ".",
     ".----.": "'",
-    "/": " "
+    "/": " ", 
+    "-....-": "-"
 }
 
 # Recursive funciton that labels an unlabeled pixel and other pixels that surround it that shares the same colour
@@ -83,6 +94,11 @@ for each pixel:
     is black
     else 
     is white
+    
+for each pixel:
+    label them
+    if labeling successful, increase label
+
 
 '''
 def translateMorseImage(imageName):
@@ -102,7 +118,7 @@ def translateMorseImage(imageName):
     #binarize the image to assist in processing       
     for y in range(height):
         for x in range(width):
-            if img[x, y] == (249, 250, 251, 255):
+            if img[x, y] <= (200, 200, 200, 200):
                 imgOutput.putpixel([x, y], (255, 255, 255, 255))
             else:
                 imgOutput.putpixel([x, y], (0, 0, 0, 0))
@@ -187,7 +203,8 @@ def translateMorseImage(imageName):
   
 def searchAlphabet(char):
     alphabet = [
-    " ", "'", ",", ".",
+    " ", "-", ",", ".", "'",
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
     "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 
     ]
@@ -208,14 +225,14 @@ def compareString(string1, string2):
         char2 = searchAlphabet(string2[i])
         if char1 > char2:
             return string2
-        elif char2 < char1:
+        elif char2 > char1:
             return string1
     return short
         
 morseList = []
 print("")
 timeStart = time.time()
-for i in range(1, 4):
+for i in range(1, 11):
     morseList.append(translateMorseImage(f"6.7/morse_images/morse{i}.png"))
 timeEnd = time.time()
 timeTaken = timeEnd - timeStart
