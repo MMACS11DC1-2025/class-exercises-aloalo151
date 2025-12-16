@@ -99,9 +99,9 @@ for each pixel:
     label them
     if labeling successful, increase label
 
-
 '''
 def translateMorseImage(imageName):
+    timeStart = time.time()
     imgLabels = []
     labelNum = 1
 
@@ -114,22 +114,39 @@ def translateMorseImage(imageName):
         imgLabels.append([])
         for x in range(width):
             imgLabels[y].append("")
+    timeEnd = time.time()
+    timeImgLabel = timeEnd - timeStart
      
-    #binarize the image to assist in processing       
+    #binarize the image to assist in processing   
+    timeStart = time.time()    
     for y in range(height):
         for x in range(width):
             if img[x, y] <= (200, 200, 200, 200):
                 imgOutput.putpixel([x, y], (255, 255, 255, 255))
             else:
                 imgOutput.putpixel([x, y], (0, 0, 0, 0))
+    timeEnd = time.time()
+    timeBinarize = timeEnd - timeStart
 
     #labels each pixel in the image with a number
     #after every successful label, increases the label number
+    timeStart = time.time()
     for x in range(width):
         for y in range(height):
             if labelPixel(img, x, y, labelNum, imgLabels, width, height):
                 labelNum += 1
-
+    timeEnd = time.time()
+    timeLabel = timeEnd - timeStart
+    '''
+    for each labeled shapes:
+        add every pixels with the label into a seperate list
+        looks through every pixel and compares it to the smallest x value, smallest y value, biggest x value, biggest y value, to get the extremes of the shape
+        if this is the second shape, set the distance from it to the first one as "notSpace"
+        if this is past the first shape, get the distance from this shape to the previous shape
+        if current distance is more than the "notSpace", add a space
+        compare the arctan of the shape's dimensions to categorize the shape and add it to the overarching string of characters
+    ''' 
+    timeStart = time.time()
     #variable to contained morse string
     labelString = "" 
     #threshold for the distance between each character to not be considered a space/distinguish between words (if distance > notSpace, is a space)
@@ -186,9 +203,16 @@ def translateMorseImage(imageName):
             labelString += "-"
         else:
             labelString += "."       
-
+    timeEnd = time.time()
+    timeTranslateMorse = timeEnd - timeStart
+    '''
+    splits the string into a list
+    translates each morse in the list into a character
+    reconstructs the string with the new non-morse characters
+    '''
     #splits the entire morse into a list with split
     #translate the words themselves
+    timeStart = time.time()
     labelList = labelString.split(" ")
     for i in range(len(labelList)):
         for character in morseDict:
@@ -199,8 +223,15 @@ def translateMorseImage(imageName):
     message = ""
     for i in range(len(labelList)):
         message += labelList[i]
-    return message
-  
+    timeEnd = time.time()
+    timeTranslateEnglish = timeEnd - timeStart
+    return (message, timeImgLabel, timeBinarize, timeLabel, timeTranslateMorse, timeTranslateEnglish)
+'''
+compares input to everything in a list
+if is equal, then returns the index
+else return a BIG number to put it last
+'''
+#function to find a character's "place" in the alphabet, to help with sorting alphabetically
 def searchAlphabet(char):
     alphabet = [
     " ", "-", ",", ".", "'",
@@ -212,7 +243,16 @@ def searchAlphabet(char):
         if char == alphabet[i]:
             return i
     return 1000000000000000000000
-    
+
+'''
+get lenght of shorter string
+for each character index
+    get the index of the current character from both strings
+    compare them and return the smaller one
+return the shorter string
+'''
+#function to compare two strings alphabetically
+#returns shorter string if both are identical
 def compareString(string1, string2):
     if len(string1) > len(string2):
         length = len(string2)
@@ -228,7 +268,7 @@ def compareString(string1, string2):
         elif char2 > char1:
             return string1
     return short
-        
+
 morseList = []
 print("")
 timeStart = time.time()
@@ -239,10 +279,18 @@ timeTaken = timeEnd - timeStart
 for pos in range(len(morseList)):
     smol = pos
     for i in range(pos+1, len(morseList)):
-        if compareString(morseList[smol], morseList[i]) == morseList[i]:
+        if compareString(morseList[smol][0], morseList[i][0]) == morseList[i][0]:
             smol = i
     morseList[pos], morseList[smol] = morseList[smol], morseList[pos]
 for i in morseList:
-    print(i)
+    print(i[0])
+    print(f"Time to create ImgLabels: {i[1]}")
+    print(f"Time to binarize image: {i[2]}")
+    print(f"Time to label every pixel: {i[3]}")
+    print(f"Time to translate all labels into morse: {i[4]}")
+    print(f"Time to translate into English: {i[5]}")
+    print("")
+for i in range(5):
+    print(morseList[i][0])
 print("")
 print(timeTaken)
