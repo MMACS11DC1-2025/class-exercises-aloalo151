@@ -6,6 +6,7 @@ Go through a picture of a morse code message, identify the dots and lines, then 
 from PIL import Image
 import time
 import math
+import random
 
 morseDict = {
     "-----": "0",
@@ -52,7 +53,8 @@ morseDict = {
 }
 
 # Recursive funciton that labels an unlabeled pixel and other pixels that surround it that shares the same colour
-#Ignores all labeled pixels
+# Ignores all labeled pixels to prevent uneccesary steps and speed up the code
+# A lot of parameters since I didn't want to use global variables
 '''
 Goes through every pixel
 if pixel not labeld:
@@ -66,10 +68,12 @@ if pixel not labeld:
 false
 '''
 def labelPixel(img, x, y, label, imgLabels, width, height):
+    # checks it the pixel is unlabeled
     if imgLabels[y][x] == "":
         r, g, b, a = img[x, y]
         if r<120 and g<120 and b<120:
             imgLabels[y][x] = label
+            # labels each pixel surrounding the current one with the same label
             for x_pos in range(x-1, x+2):
                 for y_pos in range(y-1, y+2):
                     if 0 <= x_pos <= width and 0 <= y_pos <= height:
@@ -205,6 +209,16 @@ def translateMorseImage(imageName):
             labelString += "."       
     timeEnd = time.time()
     timeTranslateMorse = timeEnd - timeStart
+    for i in range(0, labelNum):
+        if i == 0:
+            colour = (255, 255, 255, 255)
+        else:
+            colour = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256), 200)
+        for y in range(height):
+            for x in range(width):
+                if imgLabels[y][x] == i:
+                    imgOutput.putpixel([x, y], colour)
+    imgOutput.save("imgOutput.png")
     '''
     splits the string into a list
     translates each morse in the list into a character
@@ -226,6 +240,8 @@ def translateMorseImage(imageName):
     timeEnd = time.time()
     timeTranslateEnglish = timeEnd - timeStart
     return (message, timeImgLabel, timeBinarize, timeLabel, timeTranslateMorse, timeTranslateEnglish)
+
+#this entire section of functions below was made because I was ignorant and did not know that you can compare strings with < and >, so is somewhat uneccesary, but I didn't want to delete these
 '''
 compares input to everything in a list
 if is equal, then returns the index
@@ -276,6 +292,8 @@ for i in range(1, 11):
     morseList.append(translateMorseImage(f"6.7/morse_images/morse{i}.png"))
 timeEnd = time.time()
 timeTaken = timeEnd - timeStart
+
+#selection sort program 
 for pos in range(len(morseList)):
     smol = pos
     for i in range(pos+1, len(morseList)):
@@ -284,13 +302,37 @@ for pos in range(len(morseList)):
     morseList[pos], morseList[smol] = morseList[smol], morseList[pos]
 for i in morseList:
     print(i[0])
-    print(f"Time to create ImgLabels: {i[1]}")
-    print(f"Time to binarize image: {i[2]}")
-    print(f"Time to label every pixel: {i[3]}")
-    print(f"Time to translate all labels into morse: {i[4]}")
-    print(f"Time to translate into English: {i[5]}")
+    print(f"Time to create ImgLabels: {i[1]:.3f}")
+    print(f"Time to binarize image: {i[2]:.3f}")
+    print(f"Time to label every pixel: {i[3]:.3f}")
+    print(f"Time to translate all labels into morse: {i[4]:.3f}")
+    print(f"Time to translate into English: {i[5]:.3f}")
     print("")
-for i in range(5):
-    print(morseList[i][0])
+top5 = morseList[:5]
+for i in top5:
+    print(i[0])
 print("")
 print(timeTaken)
+print("")
+
+#binary search program
+while True:
+    if input("Do you wanna search for the image corresonding with a message? ").lower().strip(" ,.?!") == "yes":
+        message = input(("Enter the message: "))
+        low = 0
+        high = len(morseList)-1
+        found = False
+        while low < high:
+            middle = int((low+high)/2)
+            if morseList[middle][0] == message:
+                print(f"morse{middle+1}")
+                found = True
+                break
+            elif compareString(morseList[middle][0], message) == morseList[middle][0]:
+                high = middle-1
+            else:
+                low = middle+1
+        if not found:
+            print("The message does not have an image associated with it")
+    else:
+        break
