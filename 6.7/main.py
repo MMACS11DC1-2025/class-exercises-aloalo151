@@ -209,16 +209,18 @@ def translateMorseImage(imageName):
             labelString += "."       
     timeEnd = time.time()
     timeTranslateMorse = timeEnd - timeStart
-    for i in range(0, labelNum):
-        if i == 0:
-            colour = (255, 255, 255, 255)
-        else:
-            colour = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256), 200)
-        for y in range(height):
-            for x in range(width):
-                if imgLabels[y][x] == i:
-                    imgOutput.putpixel([x, y], colour)
-    imgOutput.save("imgOutput.png")
+    
+    #code for making labeld image
+    # for i in range(0, labelNum):
+    #     if i == 0:
+    #         colour = (255, 255, 255, 255)
+    #     else:
+    #         colour = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256), 200)
+    #     for y in range(height):
+    #         for x in range(width):
+    #             if imgLabels[y][x] == i:
+    #                 imgOutput.putpixel([x, y], colour)
+    # imgOutput.save("imgOutput.png")
     '''
     splits the string into a list
     translates each morse in the list into a character

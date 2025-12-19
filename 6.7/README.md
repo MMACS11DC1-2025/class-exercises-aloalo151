@@ -44,13 +44,13 @@ if labelPixel(img, x, y, labelNum, imgLabels, width, height):
     labelNum += 1
 ```
 <img src="readmeExample1.png" height="140" width="500"><br>
-fig 1: a visualization of the labeling system, with each shape having a different colour. Ignore the first two being similar since this image was produced with random colours assigned
+*fig. 1: a visualization of the labeling system, with each shape having a different colour. Ignore the first two being similar since this image was produced with random colours assigned*
 
 > ### Identifying
 After each shape is labeled, the program goes through each of those labels and identify each shape as a ".", "-", "/", or " "<br>
 By getting the extremes of a shape, we can identify it by getting the angle of the line directly across the shape using arctan:<br>
 <img src="readmeExample2.png" height="200" width="500"><br>
-fig 2: by using the shape's height and width, you can calculate the angle of the diagonal line created from the extremes of the shape and identify it.<br>
+*fig. 2: by using the shape's height and width, you can calculate the angle of the diagonal line created from the extremes of the shape and identify it.*<br>
 
 All of these characters are compiled into a string containing all of the morse code from the image, with spaces denoting the different "letters"
 
@@ -84,11 +84,31 @@ message = input(("Enter the message: "))
             print("The message does not have an image associated with it")
 ```
 <img src="readmeExample3.png" height="200" width="1500"><br>
-fig. 3: an example of using the binary search function<br>
+*fig. 3: an example of using the binary search function*<br>
 
 *Note: I didn't know that strings could be compared alphabetically using < and >, which resulted me in creating multiple functions to help sort the strings, like the compareString() function seen above.*
 
 ## Testing:
 With every major developement in the code, some testing is done to ensure that the code is working as intended.<br>
-1. After developing the labeling system, the images were modified to have a different colour based on their label, as shown in fig. 1. This helped visualizing the different groupings and showed any errors.
-2. During the period when I was working on translating the characters into morse,  
+1. After developing the labeling system, the images were modified to have a different colour based on their label, as shown in fig. 1. This helped visualizing the different groupings and showed any errors. 
+2. During the time when the translating into morse system was made, I was only testing with one message that started with a dot and my code only ended up working wit messages starting with a dot. Ashar help pointed out this problem when he made a message starting with a dash instead, which allowed me to solve the problem early on.
+3. After the entire system was done, morse messages outside of the prefered source were tested with the program. They did not work due to the difference in the height and width of their characters, but the ones that was from the source worked flawlessly.
+
+## Performance
+Each major process is time to test their performance and effciency. Here's the full list from shortest time taken to longest time taken:
+1. Translating into English: This process is quick and easy since it's just comparing strings to strings
+2. Labeling every pixel: This only required the program to go through every pixel once, so it's not too bad
+3. Initilization: This took longer since techinally the program had to run through every pixel twice (kinda), when creating the copy list and when binarizing the image
+4. Translating every labels into morse: This have the program loop through every instances of a label (one for every pixel) once for every label (the amount of characters detected). This process took the longest time purely because of that reason. I could have tried to optimize it, but that would require a much more complex translating system and the time taken is still quite insigificant.<br>
+<img src="readmeExample4.png" width = "800"><br>
+*fig. 4: An example run time report. Note that the last process was way to short to make a significant impact on time.*
+
+## Challenges:
+This was a very challenging problem that I decided to tackle, and along the way I had a multitude of problem and issues
+1. How to label: I had some inspiration from connected-component labeling, which does use the same process to group elements together, but I struggled to apply that to Python
+2. Labeling consistency: Since PNGs are weird, each character had like 7 shades of colour. This was somewhat solved with binarizing the image.
+3. Identifying characters: Since my program basically returns a list of pixel positions with the label, I had some issues about how to identify each one of them. Brendan suggested that using trig to help caterogize the characters and that method proved to be effective. "." were also a problem since they were the most inconsistent because of their small size, but having them as the default case when everything fails works.
+4. Spaces: Finding spaces between different words was an issue since my labelling system is not the best suited for that purpose since the spaces is in the whitespace, which is all the same label. I finally decided to detect the space between words by using the distance between the first two characters as a threshold for distances to be considered a space. However, this system fails if the first letter is an E or a T, since the first distance detected will be a space and ruin the rest of the message. This is why there is a specific countermeasure against this specific case.
+5. Sorting: Since my functions return a string instead of a number, comparing them for the sorting and searching process was gonna be more difficult. I made two functions to assist with this process, ```compareString()``` and ```searchAlphabet()```, with the former using the latter to find corresponding letter from two strings' "value" and compare them. This was all before I learned of the fact than you can compare strings with < and > comparators.<br>
+<img src="readmeExample5.png"><br>
+*fig. 5: all of this was <b>avoidable<b>*
